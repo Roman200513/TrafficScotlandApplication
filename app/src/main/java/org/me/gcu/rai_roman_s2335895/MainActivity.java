@@ -2,8 +2,6 @@ package org.me.gcu.rai_roman_s2335895;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,10 +13,8 @@ import androidx.lifecycle.ViewModelProvider;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private ListView situationList;
 
     //DOWNLOADING FROM TRAFFIC SCOTLAND (used later, once live access works)
     final String clientId = "YOUR_ID_HERE";
@@ -36,21 +32,16 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        situationList = findViewById(R.id.situationList);
-
         SituationViewModel viewModel = new ViewModelProvider(this).get(SituationViewModel.class);
-
-        viewModel.getSituations().observe(this, list -> {
-            ArrayList<String> rows = new ArrayList<>();
-            for (Situation s : list) {
-                rows.add(s.getType() + ": " + s.getDescription());
-            }
-            situationList.setAdapter(new ArrayAdapter<>(this,
-                    android.R.layout.simple_list_item_1, rows));
-        });
 
         if (viewModel.getSituations().getValue().isEmpty()) {
             viewModel.loadFromXml(loadExample("roadworksContentExample.xml"));
+        }
+
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new SituationListFragment())
+                    .commit();
         }
     }
 
