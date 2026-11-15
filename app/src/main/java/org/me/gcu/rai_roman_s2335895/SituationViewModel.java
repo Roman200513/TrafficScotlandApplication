@@ -9,17 +9,16 @@ import java.util.ArrayList;
 public class SituationViewModel extends ViewModel {
     private final MutableLiveData<ArrayList<Situation>> situations =
             new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<Situation> selected = new MutableLiveData<>();
     private final SituationParser parser = new SituationParser();
+
+    private ArrayList<Situation> roadworks = new ArrayList<>();
+    private ArrayList<Situation> incidents = new ArrayList<>();
+    private boolean loaded = false;
 
     public LiveData<ArrayList<Situation>> getSituations() {
         return situations;
     }
-
-    public void loadFromXml(String xml) {
-        situations.setValue(parser.parse(xml));
-    }
-
-    private final MutableLiveData<Situation> selected = new MutableLiveData<>();
 
     public LiveData<Situation> getSelected() {
         return selected;
@@ -29,4 +28,22 @@ public class SituationViewModel extends ViewModel {
         selected.setValue(s);
     }
 
+    public boolean isLoaded() {
+        return loaded;
+    }
+
+    public void loadFromXml(String roadworksXml, String incidentsXml) {
+        roadworks = parser.parse(roadworksXml);
+        incidents = parser.parse(incidentsXml);
+        loaded = true;
+        situations.setValue(roadworks);
+    }
+
+    public void showRoadworks() {
+        situations.setValue(roadworks);
+    }
+
+    public void showIncidents() {
+        situations.setValue(incidents);
+    }
 }

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +27,11 @@ public class SituationListFragment extends Fragment {
 
         SituationViewModel viewModel =
                 new ViewModelProvider(requireActivity()).get(SituationViewModel.class);
+
+        Button roadworksButton = view.findViewById(R.id.roadworksButton);
+        Button incidentsButton = view.findViewById(R.id.incidentsButton);
+        roadworksButton.setOnClickListener(v -> viewModel.showRoadworks());
+        incidentsButton.setOnClickListener(v -> viewModel.showIncidents());
 
         viewModel.getSituations().observe(getViewLifecycleOwner(), list -> {
             ArrayList<String> rows = new ArrayList<>();

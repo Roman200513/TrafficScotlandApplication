@@ -34,8 +34,10 @@ public class MainActivity extends AppCompatActivity {
 
         SituationViewModel viewModel = new ViewModelProvider(this).get(SituationViewModel.class);
 
-        if (viewModel.getSituations().getValue().isEmpty()) {
-            viewModel.loadFromXml(loadExample("roadworksContentExample.xml"));
+        if (!viewModel.isLoaded()) {
+            viewModel.loadFromXml(
+                    loadExample("roadworksContentExample.xml"),
+                    loadExample("unplannedContentExample.xml"));
         }
 
         if (savedInstanceState == null) {
