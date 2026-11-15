@@ -18,4 +18,15 @@ public class SituationViewModel extends ViewModel {
     public void loadFromXml(String xml) {
         situations.setValue(parser.parse(xml));
     }
+
+    private final MutableLiveData<Situation> selected = new MutableLiveData<>();
+
+    public LiveData<Situation> getSelected() {
+        return selected;
+    }
+
+    public void select(Situation s) {
+        selected.setValue(s);
+    }
+
 }

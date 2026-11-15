@@ -35,5 +35,14 @@ public class SituationListFragment extends Fragment {
             listView.setAdapter(new ArrayAdapter<>(requireContext(),
                     android.R.layout.simple_list_item_1, rows));
         });
+
+        listView.setOnItemClickListener((parent, itemView, position, id) -> {
+            ArrayList<Situation> current = viewModel.getSituations().getValue();
+            viewModel.select(current.get(position));
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new SituationDetailFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
     }
 }
