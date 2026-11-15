@@ -2,9 +2,8 @@ package org.me.gcu.rai_roman_s2335895;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Button;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,12 +33,7 @@ public class SituationListFragment extends Fragment {
         incidentsButton.setOnClickListener(v -> viewModel.showIncidents());
 
         viewModel.getSituations().observe(getViewLifecycleOwner(), list -> {
-            ArrayList<String> rows = new ArrayList<>();
-            for (Situation s : list) {
-                rows.add(s.getType() + ": " + s.getDescription());
-            }
-            listView.setAdapter(new ArrayAdapter<>(requireContext(),
-                    android.R.layout.simple_list_item_1, rows));
+            listView.setAdapter(new SituationAdapter(requireContext(), list));
         });
 
         listView.setOnItemClickListener((parent, itemView, position, id) -> {

@@ -1,5 +1,8 @@
 package org.me.gcu.rai_roman_s2335895;
 
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
+
 public class Situation {
     private String type;
     private String description;
@@ -28,6 +31,16 @@ public class Situation {
 
     public String getDelayType() {return delayType;}
     public void setDelayType(String delayType) {this.delayType = delayType;}
+
+    public long getDurationDays() {
+        try {
+            OffsetDateTime start = OffsetDateTime.parse(startTime);
+            OffsetDateTime end = OffsetDateTime.parse(endTime);
+            return ChronoUnit.DAYS.between(start, end);
+        } catch (Exception e) {
+            return -1;
+        }
+    }
 
     @Override
     public String toString() {
