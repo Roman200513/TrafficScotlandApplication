@@ -10,6 +10,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.EditText;
+
 import java.util.ArrayList;
 
 public class SituationListFragment extends Fragment {
@@ -31,6 +35,20 @@ public class SituationListFragment extends Fragment {
         Button incidentsButton = view.findViewById(R.id.incidentsButton);
         roadworksButton.setOnClickListener(v -> viewModel.showRoadworks());
         incidentsButton.setOnClickListener(v -> viewModel.showIncidents());
+
+        EditText searchBox = view.findViewById(R.id.searchBox);
+        searchBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                viewModel.search(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
 
         viewModel.getSituations().observe(getViewLifecycleOwner(), list -> {
             listView.setAdapter(new SituationAdapter(requireContext(), list));

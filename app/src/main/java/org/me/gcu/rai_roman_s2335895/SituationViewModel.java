@@ -15,6 +15,8 @@ public class SituationViewModel extends ViewModel {
     private ArrayList<Situation> roadworks = new ArrayList<>();
     private ArrayList<Situation> incidents = new ArrayList<>();
     private boolean loaded = false;
+    private boolean showingRoadworks = true;
+    private String query = "";
 
     public LiveData<ArrayList<Situation>> getSituations() {
         return situations;
@@ -40,10 +42,31 @@ public class SituationViewModel extends ViewModel {
     }
 
     public void showRoadworks() {
-        situations.setValue(roadworks);
+        showingRoadworks = true;
+        refresh();
     }
 
     public void showIncidents() {
-        situations.setValue(incidents);
+        showingRoadworks = false;
+        refresh();
+    }
+
+    public void search(String text) {
+        query = text == null ? "" : text.trim().toLowerCase();
+        refresh();
+    }
+
+    private void refresh() {
+        ArrayList<Situation> source = showingRoadworks ? roadworks : incidents;
+        ArrayList<Situation> result = new ArrayList<>();
+        for (Situation s : source) {
+            String road = s.getRoad() == null ? "" : s.getRoad().toLowerCase();
+            String desc = s.getDescription() == null ? "" : s.getDescription().toLowerCase();
+            if (query.isEmpty() || road.contains(query) || desc.contains(query)) {
+                result.add(s);
+            }
+        }
+        situations.setValue(result);
+
     }
 }

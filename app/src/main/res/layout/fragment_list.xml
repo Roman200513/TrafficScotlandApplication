@@ -24,6 +24,14 @@
             android:text="Incidents" />
     </LinearLayout>
 
+    <EditText
+        android:id="@+id/searchBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Search by road"
+        android:inputType="text"
+        android:padding="15dp" />
+
     <ListView
         android:id="@+id/situationList"
         android:layout_width="match_parent"
