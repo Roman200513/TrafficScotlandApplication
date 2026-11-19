@@ -34,17 +34,13 @@ public class MainActivity extends AppCompatActivity {
 
         SituationViewModel viewModel = new ViewModelProvider(this).get(SituationViewModel.class);
 
-        if (!viewModel.isLoaded()) {
-            viewModel.loadFromXml(
-                    loadExample("roadworksContentExample.xml"),
-                    loadExample("unplannedContentExample.xml"));
-        }
-
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new SituationListFragment())
                     .commit();
         }
+
+        viewModel.startAutoUpdate(new FeedLoader(getApplicationContext()));
     }
 
     // Reads a file from the assets folder into a String
