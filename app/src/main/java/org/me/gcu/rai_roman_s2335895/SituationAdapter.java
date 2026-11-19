@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 public class SituationAdapter extends ArrayAdapter<Situation> {
     private static final long LONG_DAYS = 30;
+    private static final long SHORT_DAYS = 365;
 
     public SituationAdapter(Context context, ArrayList<Situation> items) {
         super(context, 0, items);
@@ -44,10 +45,13 @@ public class SituationAdapter extends ArrayAdapter<Situation> {
             subtitle.setText(s.getType());
             bar.setBackgroundColor(Color.GRAY);
         } else if (days > LONG_DAYS) {
-            subtitle.setText("Long: " + days + " days");
+            subtitle.setText("Long delay: " + days + " days");
             bar.setBackgroundColor(Color.parseColor("#C62828"));
+        } else if (days > SHORT_DAYS) {
+            subtitle.setText("Medium delay: " + days + " days");
+            bar.setBackgroundColor(Color.parseColor("#F9A825"));
         } else {
-            subtitle.setText("Short: " + days + " days");
+            subtitle.setText("Short delay: " + days + " days");
             bar.setBackgroundColor(Color.parseColor("#2E7D32"));
         }
         return convertView;
