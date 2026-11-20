@@ -9,6 +9,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.Locale;
+
 public class SituationDetailFragment extends Fragment {
 
     public SituationDetailFragment() {
@@ -25,18 +27,29 @@ public class SituationDetailFragment extends Fragment {
         TextView start = view.findViewById(R.id.detailStart);
         TextView end = view.findViewById(R.id.detailEnd);
         TextView delay = view.findViewById(R.id.detailDelay);
+        TextView direction = view.findViewById(R.id.detailDirection);
+        TextView from = view.findViewById(R.id.detailFrom);
+        TextView to = view.findViewById(R.id.detailTo);
 
         SituationViewModel viewModel =
                 new ViewModelProvider(requireActivity()).get(SituationViewModel.class);
 
         viewModel.getSelected().observe(getViewLifecycleOwner(), s -> {
             if (s == null) return;
-            road.setText(s.getRoad());
+            road.setText(s.getRoad() == null ? "Road not given" : s.getRoad());
             description.setText(s.getDescription());
-            type.setText("Type: " + s.getType());
-            start.setText("Starts: " + s.getStartTime());
-            end.setText("Ends: " + s.getEndTime());
-            delay.setText("Delays: " + s.getDelayType());
+            type.setText("Type: " + Situation.humanise(s.getType()));
+            start.setText("Starts: " + Situation.prettyDate(s.getStartTime()));
+            end.setText("Ends: " + Situation.prettyDate(s.getEndTime()));
+            delay.setText("Delays: " + Situation.humanise(s.getDelayType()));
+            direction.setText("Direction: " + Situation.humanise(s.getDirection()));
+            from.setText("From: " + point(s.getFromLat(), s.getFromLon()));
+            to.setText("To: " + point(s.getToLat(), s.getToLon()));
         });
+    }
+
+    private String point(double lat, double lon) {
+        if (Double.isNaN(lat) || Double.isNaN(lon)) return "Not given";
+        return String.format(Locale.UK, "%.5f, %.5f", lat, lon);
     }
 }
