@@ -37,7 +37,7 @@ public class SituationAdapter extends ArrayAdapter<Situation> {
         TextView subtitle = convertView.findViewById(R.id.itemSubtitle);
 
         title.setText(s.getDescription());
-        icon.setImageResource(iconFor(s.getType()));
+        icon.setImageResource(iconFor(s));
         icon.setContentDescription(s.getType());
 
         long days = s.getDurationDays();
@@ -57,11 +57,18 @@ public class SituationAdapter extends ArrayAdapter<Situation> {
         return convertView;
     }
 
-    private int iconFor(String type) {
-        String t = type == null ? "" : type.toLowerCase();
-        if (t.contains("maintenance") || t.contains("roadworks") || t.contains("construction")) {
-            return R.drawable.ic_roadworks;
-        }
+    private int iconFor(Situation s) {
+        String type = s.getType() == null ? "" : s.getType().toLowerCase();
+        String d = s.getDescription() == null ? "" : s.getDescription().toLowerCase();
+
+        if (d.contains("broken down") || d.contains("breakdown")) return R.drawable.ic_broke;
+        if (type.contains("abnormaltraffic")) return R.drawable.ic_traffic;
+        if (type.contains("generalobstruction")) return R.drawable.ic_obstruction;
+        if (d.matches(".*\\bttl\\b.*") || d.contains("traffic light") || d.contains("temp lights")) return R.drawable.ic_lights;
+        if (d.contains("emergency")) return R.drawable.ic_emergency;
+        if (d.contains("lane clos") || d.contains("lanes clos")) return R.drawable.ic_lane;
+        if (d.contains("closure") || d.contains("closed")) return R.drawable.ic_closed;
+        if (type.contains("maintenance")) return R.drawable.ic_roadworks;
         return R.drawable.ic_incident;
     }
 }
