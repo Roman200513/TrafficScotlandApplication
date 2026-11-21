@@ -13,13 +13,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class SituationAdapter extends ArrayAdapter<Situation> {
-    private static final long LONG_DAYS = 30;
-    private static final long SHORT_DAYS = 365;
+    private static final long SHORT_DAYS = 30;
+    private static final long LONG_DAYS = 365;
 
-    public SituationAdapter(Context context, ArrayList<Situation> items) {
+    private final boolean showDistance;
+
+    public SituationAdapter(Context context, ArrayList<Situation> items, boolean showDistance) {
         super(context, 0, items);
+        this.showDistance = showDistance;
     }
 
     @NonNull
@@ -38,11 +42,11 @@ public class SituationAdapter extends ArrayAdapter<Situation> {
 
         title.setText(s.getDescription());
         icon.setImageResource(iconFor(s));
-        icon.setContentDescription(s.getType());
+        icon.setContentDescription(Situation.humanise(s.getType()));
 
         long days = s.getDurationDays();
         if (days < 0) {
-            subtitle.setText(s.getType());
+            subtitle.setText(Situation.humanise(s.getType()));
             bar.setBackgroundColor(Color.GRAY);
         } else if (days > LONG_DAYS) {
             subtitle.setText("Long delay: " + days + " days");
@@ -53,6 +57,14 @@ public class SituationAdapter extends ArrayAdapter<Situation> {
         } else {
             subtitle.setText("Short delay: " + days + " days");
             bar.setBackgroundColor(Color.parseColor("#2E7D32"));
+        }
+
+        if (showDistance) {
+            double km = s.distanceKmFrom(SituationViewModel.CENTRE_LAT, SituationViewModel.CENTRE_LON);
+            if (!Double.isNaN(km)) {
+                subtitle.setText(subtitle.getText()
+                        + String.format(Locale.UK, " \u00B7 %.1f km away", km));
+            }
         }
         return convertView;
     }

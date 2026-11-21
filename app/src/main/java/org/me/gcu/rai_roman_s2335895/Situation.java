@@ -66,6 +66,19 @@ public class Situation {
         }
     }
 
+    public double distanceKmFrom(double lat, double lon) {
+        double pLat = !Double.isNaN(fromLat) ? fromLat : toLat;
+        double pLon = !Double.isNaN(fromLon) ? fromLon : toLon;
+        if (Double.isNaN(pLat) || Double.isNaN(pLon)) return Double.NaN;
+        double dLat = Math.toRadians(pLat - lat);
+        double dLon = Math.toRadians(pLon - lon);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                + Math.cos(Math.toRadians(lat)) * Math.cos(Math.toRadians(pLat))
+                * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        return 6371.0 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+
     // "2023-07-22T00:00:00+01:00" -> "22 Jul 2023, 00:00"
     public static String prettyDate(String iso) {
         if (iso == null) return "Not given";
