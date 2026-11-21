@@ -4,6 +4,10 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Locale;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Situation {
     private String type;
@@ -13,11 +17,11 @@ public class Situation {
     private String endTime;
     private String delayType;
     private String direction;
+    private String subType;
     private double fromLat = Double.NaN;
     private double fromLon = Double.NaN;
     private double toLat = Double.NaN;
     private double toLon = Double.NaN;
-
 
     public Situation() {
     }
@@ -55,6 +59,8 @@ public class Situation {
     public double getToLon() {return toLon;}
     public void setToLon(double toLon) {this.toLon = toLon;}
 
+    public String getSubType() {return subType;}
+    public void setSubType(String subType) {this.subType = subType;}
 
     public long getDurationDays() {
         try {
@@ -95,6 +101,34 @@ public class Situation {
         if (camel == null || camel.isEmpty()) return "Not given";
         String spaced = camel.replaceAll("([a-z])([A-Z])", "$1 $2").toLowerCase();
         return Character.toUpperCase(spaced.charAt(0)) + spaced.substring(1);
+    }
+
+
+    private final ArrayList<GeoPoint> points = new ArrayList<>();
+    private final LinkedHashMap<String, String> extras = new LinkedHashMap<>();
+
+    public ArrayList<GeoPoint> getPoints() {return points;}
+    public LinkedHashMap<String, String> getExtras() {return extras;}
+
+    public void addExtra(String label, String value) {
+        if (value != null && !value.trim().isEmpty()) extras.put(label, value.trim());
+    }
+
+
+    public void finishParsing() {
+        points.clear();
+        if (!Double.isNaN(fromLat) && !Double.isNaN(fromLon)) points.add(new GeoPoint("From", fromLat, fromLon));
+        if (!Double.isNaN(toLat) && !Double.isNaN(toLon)) points.add(new GeoPoint("To", toLat, toLon));
+
+        if (description != null) {
+            String[] parts = description.split("\\s*-\\s+");
+            if (parts.length >= 2) {
+                addExtra("Place", parts[0]);
+                addExtra("Restriction", parts[parts.length - 1]);
+            }
+            Matcher m = Pattern.compile("\\b[AM]\\d+[A-Z]?(?:\\([A-Za-z]\\))?").matcher(description);
+            if (m.find()) addExtra("Road number", m.group());
+        }
     }
 
     @Override

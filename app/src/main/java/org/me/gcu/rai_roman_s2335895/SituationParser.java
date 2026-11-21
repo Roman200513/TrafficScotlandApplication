@@ -72,6 +72,29 @@ public class SituationParser {
                         double v = toDouble(xpp.nextText());
                         if (insideASituation && section.equals("from")) aSituation.setFromLon(v);
                         else if (insideASituation && section.equals("to")) aSituation.setToLon(v);
+                    } else if (tag.equalsIgnoreCase("numberOfOperationalLanes")) {
+                        String temp = xpp.nextText();
+                        if (insideASituation) aSituation.addExtra("Lanes open", temp);
+                    } else if (tag.equalsIgnoreCase("roadMaintenanceType")) {
+                        String temp = xpp.nextText();
+                        if (insideASituation) {
+                            aSituation.setSubType(temp);
+                            aSituation.addExtra("Works type", Situation.humanise(temp));
+                        }
+                    } else if (tag.equalsIgnoreCase("roadOrCarriagewayOrLaneManagementType")) {
+                        String temp = xpp.nextText();
+                        if (insideASituation) {
+                            aSituation.setSubType(temp);
+                            aSituation.addExtra("Management", Situation.humanise(temp));
+                        }
+                    } else if (tag.equalsIgnoreCase("complianceOption")) {
+                        String temp = xpp.nextText();
+                        if (insideASituation) aSituation.addExtra("Compliance", Situation.humanise(temp));
+                    } else if (tag.equalsIgnoreCase("urgentRoadworks")) {
+                        String temp = xpp.nextText();
+                        if (insideASituation) {
+                            aSituation.addExtra("Urgent roadworks", temp.trim().equalsIgnoreCase("true") ? "Yes" : "No");
+                        }
                     }
                 } else if (eventType == XmlPullParser.END_TAG) {
                     String tag = xpp.getName();
@@ -80,6 +103,7 @@ public class SituationParser {
                     } else if (tag.equalsIgnoreCase("to") || tag.equalsIgnoreCase("from")) {
                         section = "";
                     } else if (tag.equalsIgnoreCase("situation")) {
+                        aSituation.finishParsing();
                         situations.add(aSituation);
                         insideASituation = false;
                     }

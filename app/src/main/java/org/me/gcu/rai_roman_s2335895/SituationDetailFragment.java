@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.Locale;
+import java.util.Map;
 
 public class SituationDetailFragment extends Fragment {
 
@@ -30,6 +31,7 @@ public class SituationDetailFragment extends Fragment {
         TextView direction = view.findViewById(R.id.detailDirection);
         TextView from = view.findViewById(R.id.detailFrom);
         TextView to = view.findViewById(R.id.detailTo);
+        TextView extras = view.findViewById(R.id.detailExtras);
 
         SituationViewModel viewModel =
                 new ViewModelProvider(requireActivity()).get(SituationViewModel.class);
@@ -45,6 +47,7 @@ public class SituationDetailFragment extends Fragment {
                 direction.setText("");
                 from.setText("");
                 to.setText("");
+                extras.setText("");
                 return;
             }
             road.setText(s.getRoad() == null ? "Road not given" : s.getRoad());
@@ -56,6 +59,12 @@ public class SituationDetailFragment extends Fragment {
             direction.setText("Direction: " + Situation.humanise(s.getDirection()));
             from.setText("From: " + point(s.getFromLat(), s.getFromLon()));
             to.setText("To: " + point(s.getToLat(), s.getToLon()));
+
+            StringBuilder sb = new StringBuilder();
+            for (Map.Entry<String, String> e : s.getExtras().entrySet()) {
+                sb.append(e.getKey()).append(": ").append(e.getValue()).append("\n");
+            }
+            extras.setText(sb.toString().trim());
         });
     }
 
