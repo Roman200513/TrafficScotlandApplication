@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class SituationViewModel extends ViewModel {
     private static final long UPDATE_MINUTES = 60;
 
-    // Fixed reference point (roughly Glasgow Caledonian University)
+    // Fixed reference point (Glasgow Caledonian University)
     public static final double CENTRE_LAT = 55.8667;
     public static final double CENTRE_LON = -4.2500;
     public static final double[] DISTANCES_KM = {0, 5, 10, 25, 50};

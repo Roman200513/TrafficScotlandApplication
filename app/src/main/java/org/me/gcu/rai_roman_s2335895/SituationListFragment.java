@@ -38,6 +38,14 @@ public class SituationListFragment extends Fragment {
         roadworksButton.setOnClickListener(v -> viewModel.showRoadworks());
         incidentsButton.setOnClickListener(v -> viewModel.showIncidents());
 
+        Button mapButton = view.findViewById(R.id.mapButton);
+        mapButton.setOnClickListener(v ->
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, new SituationMapFragment())
+                        .addToBackStack(null)
+                        .commit());
+
         EditText searchBox = view.findViewById(R.id.searchBox);
         searchBox.setText(viewModel.getQuery());
         searchBox.addTextChangedListener(new TextWatcher() {
