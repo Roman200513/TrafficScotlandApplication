@@ -35,7 +35,18 @@ public class SituationDetailFragment extends Fragment {
                 new ViewModelProvider(requireActivity()).get(SituationViewModel.class);
 
         viewModel.getSelected().observe(getViewLifecycleOwner(), s -> {
-            if (s == null) return;
+            if (s == null) {
+                road.setText("Select an item to see its details");
+                description.setText("");
+                type.setText("");
+                start.setText("");
+                end.setText("");
+                delay.setText("");
+                direction.setText("");
+                from.setText("");
+                to.setText("");
+                return;
+            }
             road.setText(s.getRoad() == null ? "Road not given" : s.getRoad());
             description.setText(s.getDescription());
             type.setText("Type: " + Situation.humanise(s.getType()));

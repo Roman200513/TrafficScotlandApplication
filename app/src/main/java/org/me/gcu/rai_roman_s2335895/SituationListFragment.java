@@ -78,10 +78,14 @@ public class SituationListFragment extends Fragment {
         listView.setOnItemClickListener((parent, itemView, position, id) -> {
             ArrayList<Situation> current = viewModel.getSituations().getValue();
             viewModel.select(current.get(position));
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new SituationDetailFragment())
-                    .addToBackStack(null)
-                    .commit();
+            boolean landscape = requireActivity().findViewById(R.id.detail_container) != null;
+            if (!landscape) {
+                getParentFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new SituationDetailFragment())
+                        .addToBackStack(null)
+                        .commit();
+            }
+            // in landscape the details Fragment is already on screen and updates itself
         });
     }
 }

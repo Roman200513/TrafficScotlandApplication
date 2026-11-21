@@ -1,25 +1,17 @@
 package org.me.gcu.rai_roman_s2335895;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 public class MainActivity extends AppCompatActivity {
-
-    //DOWNLOADING FROM TRAFFIC SCOTLAND (used later, once live access works)
-    final String clientId = "YOUR_ID_HERE";
-    final String clientKey = "YOUR_KEY_HERE";
-    final String unplannedEventsURL = "https://datex2.trafficscotland.org/rest/2.3/publications/UnplannedEvents/Content.xml";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,30 +25,29 @@ public class MainActivity extends AppCompatActivity {
         });
 
         SituationViewModel viewModel = new ViewModelProvider(this).get(SituationViewModel.class);
-
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new SituationListFragment())
-                    .commit();
-        }
-
         viewModel.startAutoUpdate(new FeedLoader(getApplicationContext()));
-    }
 
-    // Reads a file from the assets folder into a String
-    private String loadExample(String fileName) {
-        StringBuilder sb = new StringBuilder();
-        try {
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(getAssets().open(fileName)));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line);
+        FragmentManager fm = getSupportFragmentManager();
+        boolean landscape = findViewById(R.id.detail_container) != null;
+
+        if (landscape) {
+            // list on the left, details on the right, no back stack needed
+            fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            fm.beginTransaction()
+                    .replace(R.id.fragment_container, new SituationListFragment())
+                    .replace(R.id.detail_container, new SituationDetailFragment())
+                    .commit();
+        } else {
+            // portrait: remove any details pane left over from landscape
+            Fragment leftover = fm.findFragmentById(R.id.detail_container);
+            if (leftover != null) {
+                fm.beginTransaction().remove(leftover).commit();
             }
-            reader.close();
-        } catch (IOException e) {
-            Log.e("Example", "Could not read file " + e);
+            if (savedInstanceState == null) {
+                fm.beginTransaction()
+                        .replace(R.id.fragment_container, new SituationListFragment())
+                        .commit();
+            }
         }
-        return sb.toString();
     }
 }
