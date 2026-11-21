@@ -38,6 +38,7 @@ public class SituationMapFragment extends Fragment {
         if (mapFragment != null) {
             mapFragment.getMapAsync(googleMap -> {
                 map = googleMap;
+                map.getUiSettings().setZoomControlsEnabled(true);
                 // Same list the list screen shows, so search and distance filters apply here too
                 viewModel.getSituations().observe(getViewLifecycleOwner(), this::showPins);
             });
