@@ -9,9 +9,14 @@
         android:id="@+id/salutation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:text="Traffic Scotland roadworks"
-        android:textSize="20sp" />
+        android:background="#1F4E8C"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="10dp"
+        android:text="Traffic Scotland Roadworks"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        android:textStyle="bold" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container"
@@ -25,5 +30,8 @@
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:text="Contains Traffic Scotland Data"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="#475569"
+        android:textAlignment="center"/>
 </LinearLayout>

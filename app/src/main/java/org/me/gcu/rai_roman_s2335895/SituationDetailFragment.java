@@ -33,6 +33,12 @@ public class SituationDetailFragment extends Fragment {
         TextView to = view.findViewById(R.id.detailTo);
         TextView extras = view.findViewById(R.id.detailExtras);
 
+        View back = view.findViewById(R.id.detailBack);
+        back.setOnClickListener(v -> requireActivity().getOnBackPressedDispatcher().onBackPressed());
+        if (requireActivity().findViewById(R.id.detail_container) != null) {
+            back.setVisibility(View.GONE);
+        }
+
         SituationViewModel viewModel =
                 new ViewModelProvider(requireActivity()).get(SituationViewModel.class);
 

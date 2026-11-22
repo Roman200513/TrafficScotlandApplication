@@ -3,6 +3,8 @@
     <style name="Base.Theme.Rai_Roman_S2335895" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">#1F4E8C</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
     </style>
 
     <style name="Theme.Rai_Roman_S2335895" parent="Base.Theme.Rai_Roman_S2335895" />
