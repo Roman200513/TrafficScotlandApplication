@@ -56,7 +56,8 @@ public class SituationDetailFragment extends Fragment {
                 extras.setText("");
                 return;
             }
-            road.setText(s.getRoad() == null ? "Road not given" : s.getRoad());
+            String shownRoad = s.getRoad() != null ? s.getRoad() : s.getExtras().get("Road number");
+            road.setText(shownRoad == null ? "Road not given" : shownRoad);
             description.setText(s.getDescription());
             type.setText("Type: " + Situation.humanise(s.getType()));
             start.setText("Starts: " + Situation.prettyDate(s.getStartTime()));

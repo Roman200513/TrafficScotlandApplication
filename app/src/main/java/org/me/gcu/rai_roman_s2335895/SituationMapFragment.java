@@ -29,6 +29,9 @@ public class SituationMapFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        view.findViewById(R.id.mapBack).setOnClickListener(v ->
+                requireActivity().getOnBackPressedDispatcher().onBackPressed());
+
         SituationViewModel viewModel =
                 new ViewModelProvider(requireActivity()).get(SituationViewModel.class);
 

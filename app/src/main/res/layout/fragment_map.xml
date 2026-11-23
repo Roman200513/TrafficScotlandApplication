@@ -8,4 +8,15 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/mapBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_margin="12dp"
+        android:textSize="35dp"
+        android:textStyle="bold"
+        android:textColor="#1F4E8C"
+        android:text="‹ " />
 </FrameLayout>
